@@ -1,7 +1,7 @@
 {
   "name": "pdf-mcp",
-  "version": "0.0.1",
-  "main": "index.js",
+  "version": "0.0.2",
+  "main": "build/index.js",
   "keywords": [
     "pdfjs",
     "mcp",
@@ -27,7 +27,7 @@
   },
   "type": "module",
   "bin": {
-    "pdf-mcp": "./build/index.js"
+    "pdf-mcp": "build/index.js"
   },
   "scripts": {
     "build": "tsc && chmod 755 build/index.js"
