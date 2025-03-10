@@ -137,16 +137,60 @@ server.tool(
   },
 );
 
+server.tool(
+  "merge-pdfs",
+  "Merge multiple PDF files into one",
+  {
+    pdfPaths: z.array(z.string()).describe("Array of PDF file paths to merge"),
+    outputPath: z.string().describe("Output path for the merged PDF"),
+  },
+  async ({ pdfPaths, outputPath }) => {
+    try {
+      // Create a new PDF document
+      const mergedPdf = await PDFDocument.create();
+
+      // Process each PDF file
+      for (const pdfPath of pdfPaths) {
+        // Read and decode the PDF
+        const pdfData = fs.readFileSync(pdfPath, { encoding: 'base64' });
+        const pdf = await PDFDocument.load(pdfData);
+        
+        // Copy all pages
+        const copiedPages = await mergedPdf.copyPages(pdf, pdf.getPageIndices());
+        copiedPages.forEach((page) => mergedPdf.addPage(page));
+      }
+
+      // Save the merged PDF
+      const mergedPdfBytes = await mergedPdf.save();
+      const mergedPdfBase64 = Buffer.from(mergedPdfBytes).toString('base64');
+      fs.writeFileSync(outputPath, mergedPdfBase64, { encoding: 'base64' });
+
+      return {
+        content: [
+          {
+            type: "text",
+            text: `Successfully merged ${pdfPaths.length} PDFs into ${outputPath}`,
+          },
+        ],
+      };
+    } catch (error: unknown) {
+      const errorMessage = error instanceof Error ? error.message : String(error);
+      return {
+        content: [
+          {
+            type: "text",
+            text: `Error merging PDFs: ${errorMessage}`,
+          },
+        ],
+      };
+    }
+  },
+);
+
 async function main() {
   const transport = new StdioServerTransport();
   await server.connect(transport);
   console.error("PDF MCP Server running on stdio");
-}
-
-main().catch((error) => {
-  console.error("Fatal error in main():", error);
-  process.exit(1);
-});  console.error("PDF MCP Server running on stdio");
 }
 
 main().catch((error) => {
