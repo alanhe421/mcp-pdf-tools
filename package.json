@@ -1,0 +1,38 @@
+{
+  "name": "pdf-mcp",
+  "version": "0.0.1",
+  "main": "index.js",
+  "keywords": [
+    "pdfjs",
+    "mcp",
+    "server"
+  ],
+  "author": "Alan He",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/alanhe421/pdf-mcp.git"
+  },
+  "license": "ISC",
+  "description": "A MCP server for removing pages from PDFs",
+  "dependencies": {
+    "@modelcontextprotocol/sdk": "^1.6.1",
+    "pdf-lib": "^1.17.1",
+    "pdfjs-dist": "^4.8.69",
+    "zod": "^3.24.2"
+  },
+  "devDependencies": {
+    "@types/node": "^22.13.10",
+    "@types/pdfjs-dist": "^2.10.377",
+    "typescript": "^5.8.2"
+  },
+  "type": "module",
+  "bin": {
+    "pdf-mcp": "./build/index.js"
+  },
+  "scripts": {
+    "build": "tsc && chmod 755 build/index.js"
+  },
+  "files": [
+    "build"
+  ]
+}
