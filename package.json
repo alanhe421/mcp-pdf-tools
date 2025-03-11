@@ -17,7 +17,6 @@
   "dependencies": {
     "@modelcontextprotocol/sdk": "^1.6.1",
     "pdf-lib": "^1.17.1",
-    "pdfjs-dist": "^4.8.69",
     "zod": "^3.24.2"
   },
   "devDependencies": {
