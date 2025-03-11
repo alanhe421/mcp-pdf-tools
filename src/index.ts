@@ -15,7 +15,7 @@ server.tool(
   "remove-pdf-pages",
   "Remove pages from a PDF",
   {
-    pdfPath: z.string().describe("The path to the PDF file"),
+    pdfPath: z.string().describe("The absolute path to the PDF file"),
     pageNumbers: z.array(z.number()).describe("The page numbers to remove from the PDF (1-indexed)"),
   },
   async ({ pdfPath, pageNumbers }) => {
@@ -83,7 +83,7 @@ server.tool(
   "Add a text watermark to a PDF",
   {
     watermarkText: z.string().describe("The text to add as a watermark"),
-    pdfPath: z.string().describe("The path to the PDF file"),
+    pdfPath: z.string().describe("The absolute path to the PDF file"),
     position: z.enum(["center", "top", "bottom", "topLeft", "topRight", "bottomLeft", "bottomRight"])
       .default("center")
       .describe("The position of the watermark on the page"),
@@ -183,8 +183,8 @@ server.tool(
   "merge-pdfs",
   "Merge multiple PDF files into one",
   {
-    pdfPaths: z.array(z.string()).describe("Array of PDF file paths to merge"),
-    outputPath: z.string().describe("Output path for the merged PDF"),
+    pdfPaths: z.array(z.string()).describe("Array of absolute paths to the PDF files to merge"),
+    outputPath: z.string().describe("The absolute path to the output merged PDF file"),
   },
   async ({ pdfPaths, outputPath }) => {
     try {
