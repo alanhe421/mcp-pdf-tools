@@ -11,7 +11,7 @@
 npx pdf-mcp
 ```
 
-## tools
+## Tools
 
 1. remove-pdf-pages
 2. merge-pdfs
