@@ -1,9 +1,9 @@
 #!/usr/bin/env node
 import { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 import { StdioServerTransport } from "@modelcontextprotocol/sdk/server/stdio.js";
-import { z } from "zod";
-import { degrees, PDFDocument, rgb, StandardFonts } from 'pdf-lib';
 import fs from 'fs';
+import { degrees, PDFDocument, rgb, StandardFonts } from 'pdf-lib';
+import { z } from "zod";
 // Create server instance
 const server = new McpServer({
   name: "pdf-server",
