@@ -84,8 +84,11 @@ server.tool(
   {
     watermarkText: z.string().describe("The text to add as a watermark"),
     pdfPath: z.string().describe("The path to the PDF file"),
+    position: z.enum(["center", "top", "bottom", "topLeft", "topRight", "bottomLeft", "bottomRight"])
+      .default("center")
+      .describe("The position of the watermark on the page"),
   },
-  async ({ watermarkText, pdfPath }) => {
+  async ({ watermarkText, pdfPath, position }) => {
     try {
       // Decode base64 PDF
       const pdfData = fs.readFileSync(pdfPath, { encoding: 'base64' });
@@ -100,14 +103,53 @@ server.tool(
       for (const page of pages) {
         const { width, height } = page.getSize();
 
+        // 计算水印位置
+        const textSize = 50;  // 字体大小
+        const padding = 50;    // 额外边距
+
+        let x = 0;
+        let y = 0;
+
+        // 根据position参数设置水印位置
+        switch (position) {
+          case "center":
+            x = width / 2 - 150;
+            y = height / 2;
+            break;
+          case "top":
+            x = width / 2 - 150;
+            y = height - padding;
+            break;
+          case "bottom":
+            x = width / 2 - 150;
+            y = padding + textSize;
+            break;
+          case "topLeft":
+            x = padding;
+            y = height - padding;
+            break;
+          case "topRight":
+            x = width - 300;
+            y = height - padding;
+            break;
+          case "bottomLeft":
+            x = padding;
+            y = padding + textSize;
+            break;
+          case "bottomRight":
+            x = width - 300;
+            y = padding + textSize;
+            break;
+        }
+
         // 设置水印文本
         page.drawText(watermarkText, {
-          x: width / 2 - 150, // 水平居中（根据文本长度调整）
-          y: height / 2,      // 垂直居中
-          size: 50,          // 字体大小
+          x: x,
+          y: y,
+          size: textSize,          // 字体大小
           font: helveticaFont,
-          color: rgb(0.5, 0.5, 0.5), // 灰色
-          opacity: 0.3,      // 透明度
+          color: rgb(1, 0, 0), // 红色，更明显
+          opacity: 0.8,      // 增加不透明度
           rotate: degrees(45) // 旋转45度
         });
       }
@@ -154,7 +196,7 @@ server.tool(
         // Read and decode the PDF
         const pdfData = fs.readFileSync(pdfPath, { encoding: 'base64' });
         const pdf = await PDFDocument.load(pdfData);
-        
+
         // Copy all pages
         const copiedPages = await mergedPdf.copyPages(pdf, pdf.getPageIndices());
         copiedPages.forEach((page) => mergedPdf.addPage(page));
